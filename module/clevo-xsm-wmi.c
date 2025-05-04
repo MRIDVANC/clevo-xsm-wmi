@@ -941,7 +941,6 @@ static int clevo_xsm_wmi_probe(struct platform_device *dev)
 static void clevo_xsm_wmi_remove(struct platform_device *dev)
 {
 	wmi_remove_notify_handler(CLEVO_EVENT_GUID);
-	return 0;
 }
 
 static int clevo_xsm_wmi_resume(struct platform_device *dev)
