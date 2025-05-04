@@ -871,9 +871,6 @@ static void clevo_xsm_wmi_notify(union acpi_object *obj, void *context)
 
 	clevo_xsm_wmi_evaluate_wmbb_method(GET_EVENT, 0, &event);
 
-	// Geri kalan kod aynen kalır...
-}
-
 	switch (event) {
 	case 0xF4:
 		CLEVO_XSM_DEBUG("Airplane-Mode Hotkey pressed\n");
@@ -941,7 +938,7 @@ static int clevo_xsm_wmi_probe(struct platform_device *dev)
 	return 0;
 }
 
-static int clevo_xsm_wmi_remove(struct platform_device *dev)
+static void clevo_xsm_wmi_remove(struct platform_device *dev)
 {
 	wmi_remove_notify_handler(CLEVO_EVENT_GUID);
 	return 0;
@@ -1196,7 +1193,7 @@ static ssize_t clevo_xsm_color_store(struct device *child,
 static DEVICE_ATTR(kb_color, 0644,
 	clevo_xsm_color_show, clevo_xsm_color_store);
 
-#if CLEVO_HAS_HWMON
+#if defined(CLEVO_HAS_HWMON)
 struct clevo_hwmon {
 	struct device *dev;
 };
