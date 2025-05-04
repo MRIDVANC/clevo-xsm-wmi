@@ -849,11 +849,20 @@ static struct kb_backlight_ops kb_8_color_ops = {
 };
 
 
-static void clevo_xsm_wmi_notify(u32 value, void *context)
+static void clevo_xsm_wmi_notify(union acpi_object *obj, void *context)
 {
 	static unsigned int report_cnt;
-
+	u32 value;
 	u32 event;
+
+	// Yeni eklenen kontrol kodu
+	if (!obj || obj->type != ACPI_TYPE_INTEGER) {
+		CLEVO_XSM_INFO("Unexpected WMI event (null or non-integer)\n");
+		return;
+	}
+
+	// value değerini obj'den alıyoruz
+	value = obj->integer.value;
 
 	if (value != 0xD0) {
 		CLEVO_XSM_INFO("Unexpected WMI event (%0#6x)\n", value);
@@ -861,6 +870,9 @@ static void clevo_xsm_wmi_notify(u32 value, void *context)
 	}
 
 	clevo_xsm_wmi_evaluate_wmbb_method(GET_EVENT, 0, &event);
+
+	// Geri kalan kod aynen kalır...
+}
 
 	switch (event) {
 	case 0xF4:
